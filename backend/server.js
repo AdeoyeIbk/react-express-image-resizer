@@ -9,6 +9,10 @@ const upload = multer();
 
 app.use(cors());
 
+
+app.get("/", (req, res) => {
+	res.send("Image Resizer API is running.");
+});
 // Resize endpoint
 app.post("/resize", upload.single("image"), async (req, res) => {
 	try {
