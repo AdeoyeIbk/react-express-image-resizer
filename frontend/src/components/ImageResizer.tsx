@@ -31,7 +31,7 @@ export default function ImageResizer() {
     formData.append("height", `${dimension.height}${dimension.heightUnit}`);
 
     try {
-      const response = await axios.post("https://react-express-image-resizer.onrender.com", formData, {
+      const response = await axios.post("https://react-express-image-resizer.onrender.com/resize", formData, {
         responseType: "blob", // tells axios we expect a binary file
         headers: {
           "Content-Type": "multipart/form-data",
