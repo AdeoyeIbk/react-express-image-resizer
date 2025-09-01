@@ -1,5 +1,5 @@
 import FileDropArea from "./FileDropArea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios"
 
 export default function ImageResizer() {
@@ -59,20 +59,28 @@ export default function ImageResizer() {
     }
   }
 
+  useEffect(() => {
+  if (resizedImageUrl) {
+    console.log("Resized image URL updated:", resizedImageUrl);
+  }
+}, [resizedImageUrl]);
 
+useEffect(() => {
+  setResizedImageUrl(null);
+}, [imageFile]);
 
 
   return (
-    <div className="w-1/2 p-12 shadow-lg mx-auto flex flex-col gap-4 justify-between h-3/5 align-items-center">
-  <div className="flex justify-center items-center gap-8">
-        <div className="flex flex-col items-start">
+    <div className="w-full max-w-2xl p-4 sm:p-8 md:p-12 shadow-lg mx-auto flex flex-col gap-4 justify-between min-h-[60vh] align-items-center bg-white rounded-lg">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 w-full">
+  <div className="flex flex-col items-start w-full md:w-auto">
           <label className="mb-2 font-semibold text-gray-700">Width</label>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full">
             <input
               type="number"
               name="width"
               placeholder="Width"
-              className="p-2 border border-gray-300 rounded-lg w-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="p-2 border border-gray-300 rounded-lg w-full max-w-[6rem] focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               min={1}
               max={9999}
               value={dimension.width}
@@ -80,7 +88,7 @@ export default function ImageResizer() {
             />
             <select
               name="widthUnit"
-              className="p-2 border border-gray-300 rounded-lg w-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
+              className="p-2 border border-gray-300 rounded-lg w-full max-w-[5rem] focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
               value={dimension.widthUnit}
               onChange={handleDimensionChange}
             >
@@ -93,20 +101,20 @@ export default function ImageResizer() {
                 {/* Fit mode toggle icon */}
         <button
           type="button"
-          className={`mx-4 px-2 rounded-sm border ${fitMode === 'inside' ? 'bg-blue-100 border-blue-500' : 'bg-red-100 border-red-500'} flex items-center justify-center`}
+          className={`mx-0 md:mx-4 px-1 rounded-sm border ${fitMode === 'inside' ? 'bg-blue-100 border-blue-500' : 'bg-red-100 border-red-500'} flex items-center justify-center h-12 w-12`}
           onClick={() => setFitMode(fitMode === 'inside' ? 'cover' : 'inside')}
           aria-label={fitMode === 'inside' ? 'Scale (fit: inside)' : 'Crop (fit: cover)'}
         >
           <i className="bi bi-link text-xl"></i>
         </button>
-        <div className="flex flex-col items-start">
+  <div className="flex flex-col items-start w-full md:w-auto">
           <label className="mb-2 font-semibold text-gray-700">Height</label>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full">
             <input
               type="number"
               name="height"
               placeholder="Height"
-              className="p-2 border border-gray-300 rounded-lg w-24 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="p-2 border border-gray-300 rounded-lg w-full max-w-[6rem] focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               min={1}
               max={9999}
               value={dimension.height}
@@ -114,7 +122,7 @@ export default function ImageResizer() {
             />
             <select
               name="heightUnit"
-              className="p-2 border border-gray-300 rounded-lg w-20 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
+              className="p-2 border border-gray-300 rounded-lg w-full max-w-[5rem] focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
               value={dimension.heightUnit}
               onChange={handleDimensionChange}
             >
@@ -126,11 +134,11 @@ export default function ImageResizer() {
         </div>
       </div>
   {/* <img src={defaultImage} alt="" className="" /> */}
-      <FileDropArea imageFile={imageFile} setImageFile={setImageFile} />
+  <FileDropArea imageFile={imageFile} setImageFile={setImageFile} />
       
 
       <button
-        className={`bg-blue-900 text-white py-2 px-4 rounded mb-4 w-full ${
+        className={`bg-blue-900 text-white py-2 px-4 rounded mb-4 w-full text-base sm:text-lg ${
           canUpload ? "hover:bg-blue-700 hover:cursor-pointer" : "opacity-50 cursor-not-allowed"
         }`}
         disabled={!canUpload}
@@ -139,12 +147,12 @@ export default function ImageResizer() {
         Upload Image
       </button>
       {resizedImageUrl && (
-        <div className="flex flex-col items-center gap-2 mt-4">
-          <img src={resizedImageUrl} alt="Resized Preview" className="max-h-40 object-contain rounded shadow" />
+        <div className="flex flex-col items-center gap-2 mt-4 w-full">
+          <img src={resizedImageUrl} alt="Resized Preview" className="max-h-40 object-contain rounded shadow w-full sm:w-2/3 md:w-1/2" />
           <a
             href={resizedImageUrl}
-          download={downloadName || `resized-image.${downloadExt}`}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            download={downloadName || `resized-image.${downloadExt}`}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full sm:w-auto text-center"
           >
             Download Resized Image
           </a>
