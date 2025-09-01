@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 // Resize endpoint
 app.post("/resize", upload.single("image"), async (req, res) => {
 	try {
-		let { width, height } = req.body;
+	let { width, height, fit } = req.body;
 		const format = path.extname(req.file.originalname).substring(1); // keep original extension
 
 		// Helper to convert units to pixels
@@ -35,8 +35,9 @@ app.post("/resize", upload.single("image"), async (req, res) => {
 		const widthPx = toPixels(width);
 		const heightPx = toPixels(height);
 
+		const fitOption = fit === 'cover' ? 'cover' : 'inside';
 		const resized = await sharp(req.file.buffer)
-			.resize(widthPx, heightPx, { fit: "inside" })
+			.resize(widthPx, heightPx, { fit: fitOption })
 			.toFormat(format)
 			.toBuffer();
 
